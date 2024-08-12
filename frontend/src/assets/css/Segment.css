@@ -3,3 +3,15 @@
     padding: 10px;
     margin: 3px;
 }
+
+.sticky-card {
+    position: sticky;
+    top: 0; /* Adjust this value to change the offset from the top */
+    z-index: 1000; /* Ensure it stays above other content */
+}
+
+.img-container img {
+    height: 100%;
+    max-width: 100%;
+    object-fit: contain;
+}

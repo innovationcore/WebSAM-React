@@ -1,0 +1,10 @@
+    #navbar-name {
+        text-decoration: none;
+        color: black;
+        font-size: 25px;
+    }
+
+    .navbar-comp {
+        padding-top: 5px;
+        padding-bottom: 0px;
+    }

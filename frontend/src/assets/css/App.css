@@ -1,0 +1,68 @@
+body, html {
+    height: 100%;
+    margin: 0 0 0 0;
+    padding: 0 0 0 0;
+}
+
+#root {
+    /*text-align: center;*/
+}
+
+img {
+    pointer-events: none;
+}
+
+.navbar-comp, .nav-link {
+    color: #000000 !important;
+}
+
+a {
+    color: #54a45c !important;
+}
+
+CardLink {
+    color: #54a45c !important;
+}
+
+:root {
+  --jumbotron-padding-y: 2rem;
+}
+
+.jumbotron {
+  padding-top: var(--jumbotron-padding-y);
+  padding-bottom: var(--jumbotron-padding-y);
+  /*
+  margin-bottom: 20px;
+  background-color: white;*/
+  /*background-image: url('https://mdbootstrap.com/img/Photos/Others/images/76.jpg');*/
+}
+
+@media (max-width: 500px) {
+  .jumbotron {
+    padding-top: calc(var(--jumbotron-padding-y) * 2);
+    padding-bottom: calc(var(--jumbotron-padding-y) * 2);
+  }
+}
+
+.jumbotron p:last-child {
+  margin-bottom: 0;
+}
+
+.jumbotron-heading {
+  font-weight: 300;
+}
+
+.jumbotron .container {
+  max-width: 80rem;
+  /*height: 200px;*/
+}
+
+.box-shadow {
+  box-shadow: 0 0.25rem 0.75rem rgba(0, 0, 0, 0.05);
+}
+
+#library-img {
+  max-width: 200px;
+  width: 100%;
+  aspect-ratio: auto 1 / 1;
+}

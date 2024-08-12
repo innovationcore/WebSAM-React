@@ -1,0 +1,16 @@
+version: '3.8'
+services:
+  middle-api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      - API_URL=http://Sturdy-SAM:8090
+    restart: unless-stopped
+    volumes:
+      - ../:/var/www/html/
+    ports:
+      - "8090:8090"
+
+volumes:
+  image-db:

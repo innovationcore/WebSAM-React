@@ -11,8 +11,9 @@
 
 }
 
-img {
-
+.thumbnail {
+    max-height: 30px;
+    width: auto;
 }
 
 button {
@@ -37,5 +38,5 @@ th {
 }
 
 tbody > tr:nth-of-type(even) {
-  background-color: #9ec5fe;
+  background-color: lightgrey;
 }

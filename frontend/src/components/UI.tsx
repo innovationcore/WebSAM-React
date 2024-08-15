@@ -217,6 +217,7 @@ function UI() {
     }
 
     const handleDBDownload = () => {
+        console.log(data);
         if (!data) return
         const formData = new FormData()
         formData.append('file', new File([data.file], 'image.png'))
@@ -249,7 +250,7 @@ function UI() {
         controller.current?.abort()
         controller.current = new AbortController()
         setProcessing(true)
-        fetch('/api/download', { // send it to the download api for the template site
+        fetch(`${config['sam_server']}/api/download`, { // send it to the download api for the template site
           method: 'POST',
           body: formData,
           signal: controller.current?.signal
@@ -453,7 +454,7 @@ function UI() {
                                     { img_set &&
                                         <CardBody>
                                             <CardTitle as="h2">Save Options</CardTitle>
-                                            <button className={'controls'} style={{width: '100%'}}>Save Segmentation to DB</button>
+                                            <button className={'controls'} style={{width: '100%'}} onClick={handleDBDownload}>Save Segmentation to DB</button>
                                             <button className={'controls'} style={{width: '100%'}}>Save Segmentation Locally</button>
                                         </CardBody>
                                     }

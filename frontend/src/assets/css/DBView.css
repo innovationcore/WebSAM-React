@@ -1,0 +1,41 @@
+/*.row {
+    display: flex;
+    flex-direction: row;
+    padding-top: 2px;
+    padding-bottom: 2px;
+    align-items: center;
+    justify-content: center;
+}*/
+
+.col {
+
+}
+
+img {
+
+}
+
+button {
+    border-radius: .375rem;
+}
+
+table {
+    border-collapse: collapse;
+    border: 1px solid black !important;
+    border-radius: .375rem;
+    overflow: auto;
+}
+
+td, th {
+    border: 1px solid black;
+    overflow-x: auto;
+}
+
+th {
+    background-color: #0033a0;
+    color: white;
+}
+
+tbody > tr:nth-of-type(even) {
+  background-color: #9ec5fe;
+}

@@ -7,7 +7,7 @@ const config = {
         'user': 'postgres',
         'password': 'postgres',
         'db': 'postgres',
-        'pg_port': '5432',
+        'port': '5432',
         'allowed_tables': ['websam']
     }
 }

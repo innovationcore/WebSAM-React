@@ -317,7 +317,7 @@ function UI() {
         controller.current?.abort()
         controller.current = new AbortController()
         setProcessing(true)
-        fetch('/sam/api/point', {
+        fetch('/api/point', {
           method: 'POST',
           body: fromData,
           signal: controller.current?.signal,
@@ -335,11 +335,11 @@ function UI() {
         })
     }
 
-    const handleDicomImage = () => {
+    /*const handleDicomImage = () => {
         setImageLoaded(true);
         const input = document.createElement('input');
         input.type = 'file';
-        input.accept = 'image/*, .dcm, .dicom';
+        input.accept = 'image/!*, .dcm, .dicom';
 
         input.onchange = async (e) => {
           const file = (e.target as HTMLInputElement).files?.[0];
@@ -398,7 +398,7 @@ function UI() {
         };
 
         input.click();
-      };
+      };*/
 
 
 
@@ -413,6 +413,12 @@ function UI() {
         const imageUrl = URL.createObjectURL(file);
         setImagePreviewUrl(imageUrl);
         setImg(true);
+    }
+
+    const Undo = () => {
+        points.pop();
+        setMasks([]);
+        handleClick();
     }
 
     // Remove images and all segmentations
@@ -460,6 +466,7 @@ function UI() {
                             </Card>
                         </Card>
                     </Col>
+                    {/* Image Upload Window */}
                     <Col className={'img-container'} style={{width: '75%', height: '90%', overflowY: 'auto'}}>
                         <Card style={{textAlign: 'center'}}>
                             {!img_set &&

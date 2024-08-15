@@ -1,2 +1,4 @@
 /sam server/model
 /sam server/venv/
+/backend/sam server/venv/
+/backend/sam server/model/

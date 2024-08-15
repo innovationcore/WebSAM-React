@@ -14,16 +14,25 @@ from PIL import Image
 import base64
 from datetime import date, datetime
 from fastapi.middleware.cors import CORSMiddleware
+from sqlalchemy import create_engine, text
+import json
 
 
 @click.command()
 
 @click.option('--port', default=8090, help='port')
 @click.option('--host', default='0.0.0.0', help='host')
+
 def main(
     port=8090,
     host="0.0.0.0",
 ):
+    def db_connection():
+        with open('config.json', 'r') as f:
+            config = json.load(f)
+            print(config)
+            engine = create_engine(f'postgresql+psycopg2://{config['pgsql']['user']}:{config['pgsql']['password']}@{config['pgsql']['host']}:{config['pgsql']['port']}/{config['pgsql']['db']}')
+        return engine
 
     # For use in /api/save_json
     class Item(BaseModel):
@@ -45,6 +54,17 @@ def main(
     @app.get('/')
     def index():
         return {"code": 0, "data": "Hello World"}
+
+
+    @app.get('/api/get_table')
+    async def get_table():
+        engine = db_connection()
+        with engine.connect() as conn:
+            result = conn.execute(text("""select * from websam"""))
+            rows = result.fetchall()
+            column_names = result.keys()
+            result_list = [dict(zip(column_names, row)) for row in rows] # Convert each row into a dictionary
+        return {"code": 0, "data": result_list}
 
     # Collect a JSON file which contains the points to recreate the overlay
     @app.post('/api/save_json')

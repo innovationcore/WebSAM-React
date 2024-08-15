@@ -17,5 +17,5 @@ RUN pip install -r requirements.txt
 
 COPY . .
 
-CMD ["python3" ,"scripts/server.py"]
+CMD ["python3" ,"scripts/sam_server.py"]
 EXPOSE 8000

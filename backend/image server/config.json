@@ -1,0 +1,10 @@
+{
+  "pgsql": {
+    "host": "localhost",
+    "user": "postgres",
+    "password": "postgres",
+    "db": "postgres",
+    "port": 5432,
+    "allowed_tables": ["websam"]
+  }
+}

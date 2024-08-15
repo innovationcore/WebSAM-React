@@ -6,6 +6,6 @@ WORKDIR /app
 
 COPY . .
 RUN pip install click uvicorn fastapi pillow typing-extensions python-multipart numpy requests SimpleITK
-# CMD ["bash", "-c", "python3 Sturdy-SAM.py & tail -f /dev/null"]
-CMD ["bash", "-c", "python3 Sturdy-SAM.py"]
+# CMD ["bash", "-c", "python3 image_server.py & tail -f /dev/null"]
+CMD ["bash", "-c", "python3 image_server.py"]
 EXPOSE 8090

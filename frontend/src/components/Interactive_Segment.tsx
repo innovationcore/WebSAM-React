@@ -286,33 +286,49 @@ export function InteractiveSegment(
                 </label>
             </div>
             <canvas
-                ref={canvasRef}
-                width={width}
-                height={height}
-                style={{
-                    border: '2px solid #000',
-                    transform: `scale(${scale})`,
-                    transformOrigin: 'top left',
-                }}
-                onClick={async (e) => {
-                    if (ready && !processing) {
-                        const rect = (e.target as HTMLCanvasElement).getBoundingClientRect();
-                        const x = (e.clientX - rect.left) / scale;
-                        const y = (e.clientY - rect.top) / scale;
-                        const label = e.altKey ? 0 : 1;
-                        if (mode === 'box') {
-                            if (points.length === 2) {
-                                setPoints([{ x, y, label }]);
-                            } else {
-                                setPoints([...points, { x, y, label }]);
-                                if (points.length === 1) {
-                                    setBoxReady(true);
-                                }
-                            }
-                        } else {
-                            setPoints([{ x, y, label }]);
-                        }
+                className="w-full" ref={canvasRef} width={width} height={height}
+                onContextMenu={(e) => {
+                    e.preventDefault()
+                    if (processing) return
+                    const canvas = canvasRef.current as HTMLCanvasElement
+                    const rect = canvas.getBoundingClientRect()
+                    const x = (e.clientX - rect.left) / scale
+                    const y = (e.clientY - rect.top) / scale
+                    switch (mode) {
+                        case 'click':
+                            setPoints([...points, {x, y, label: 0}])
+                            break
                     }
+                }}
+                onClick={(e) => {
+                    e.preventDefault()
+                    if (processing) return
+                    const canvas = canvasRef.current as HTMLCanvasElement
+                    const rect = canvas.getBoundingClientRect()
+                    const x = (e.clientX - rect.left) / scale
+                    const y = (e.clientY - rect.top) / scale
+                    switch (mode) {
+                        case 'click':
+                            setPoints([...points, {x, y, label: 1}])
+                            break
+                    }
+                }}
+                onMouseMove={(e) => {
+                    if (mode !== 'box' || processing) return
+                    const canvas = canvasRef.current as HTMLCanvasElement
+                    const rect = canvas.getBoundingClientRect()
+                    const x = (e.clientX - rect.left) / scale
+                    const y = (e.clientY - rect.top) / scale
+                    if (e.buttons === 0 && !ready) {
+                        setPoints([{x, y, label: 1}])
+                    } else if (e.buttons === 1 && points.length >= 1) {
+                        setBoxReady(false)
+                        setPoints([points[0], {x, y, label: 1}])
+                    }
+                }}
+                onMouseUp={(e) => {
+                    if (mode !== 'box' || processing) return
+                    setBoxReady(true)
                 }}
             />
         </div>

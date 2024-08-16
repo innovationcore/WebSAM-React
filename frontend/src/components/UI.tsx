@@ -1,9 +1,10 @@
 import {Card, CardBody, CardHeader, CardTitle, Col, Container, Row} from "react-bootstrap";
 import '../assets/css/Segment.css'
+import controls from '../assets/css/Controls.module.css'
 import config from "../../config";
 import React, {useEffect, useRef, useState} from "react";
 import { InteractiveSegment, Point, Mask, Data, }
-  from '/interactive_segment'
+  from './Interactive_Segment'
 
 function Popup(text: string, timeout: number = 1000) {
   const popup = document.createElement('div')
@@ -49,6 +50,10 @@ function UI() {
     const [processing, setProcessing] = useState<boolean>(false)
     const [ready, setBoxReady] = useState<boolean>(false)
     const controller = useRef<AbortController | null>()
+
+    useEffect(() => {
+        console.log(points);
+    }, [points]);
 
     // Checks the display API for a file
     useEffect(() => {
@@ -123,7 +128,7 @@ function UI() {
           controller.current?.abort()
           controller.current = new AbortController()
           setProcessing(true)
-          fetch('/api/point', {
+          fetch(`${config.sam_server}/api/point`, {
             method: 'POST',
             body: formData,
             signal: controller.current?.signal,
@@ -156,7 +161,7 @@ function UI() {
           controller.current?.abort()
           controller.current = new AbortController()
           setProcessing(true)
-          fetch('/api/box', {
+          fetch(`${config.sam_server}/api/box`, {
             method: 'POST',
             body: formData,
             signal: controller.current?.signal
@@ -177,16 +182,20 @@ function UI() {
         }
     }, [data, mode, points, ready])
 
+    // When mode changes, reset points and masks so that we start with a clean slate
     useEffect(() => {
         setPoints([])
         setMasks([])
         setProcessing(false)
         switch (mode) {
           case 'click':
+              console.log(mode);
             break
           case 'box':
+              console.log(mode);
             break
           case 'everything':
+              console.log(mode);
             break
         }
     }, [mode])
@@ -265,7 +274,7 @@ function UI() {
     }
 
     //Should function the same as handleCopyPaste but with uploading a JSON file
-      const handleUploadJSON = () => {
+    const handleUploadJSON = () => {
         if (!data) return
         const formData = new FormData()
 
@@ -401,8 +410,6 @@ function UI() {
         input.click();
       };*/
 
-
-
     const buttonClick = event => {
         hiddenFileInput.current.click();
     }
@@ -413,7 +420,24 @@ function UI() {
         setFilename(file.name);
         const imageUrl = URL.createObjectURL(file);
         setImagePreviewUrl(imageUrl);
+        setImageLoaded(true);
         setImg(true);
+        if (file) {
+            setImageLoaded(true)
+            setFilename(file.name.replace(/ /g, '+'))
+            const img = new Image()
+            img.src = URL.createObjectURL(file)
+            img.onload = () => {
+                setImageX(img.width.toString())
+                setImageY(img.height.toString())
+                setData({
+                    width: img.width,
+                    height: img.height,
+                    file,
+                    img,
+                })
+            }
+        }
     }
 
     const Undo = () => {
@@ -427,11 +451,8 @@ function UI() {
         setFilename('');
         setImagePreviewUrl(null);
         setImg(false);
+        setImageLoaded(false);
     }
-
-    /*useEffect(() => {
-        if (!data) return;
-    });*/
 
     return(
         <>
@@ -443,9 +464,9 @@ function UI() {
                                 <CardHeader style={{textAlign:'center'}}>
                                     <CardBody style={{display: 'flex', flexDirection: 'column'}}>
                                         <CardTitle as="h2">Controls</CardTitle>
-                                        <button id={'click'} className={'controls'}>Click</button>
-                                        <button id={'box'} className={'controls'}>Box</button>
-                                        <button id={'everything'} className={'controls'}>Everything</button>
+                                        <button id={'click'} className={`${mode === 'click' ? controls.active : controls.inactive} controls`} onClick={() => {setMode('click')}}>Click</button>
+                                        <button id={'box'} className={`${mode === 'box' ? controls.active : controls.inactive} controls`} onClick={() => {setMode('box')}}>Box</button>
+                                        <button id={'everything'} className={`${mode === 'everything' ? controls.active : controls.inactive} controls`} onClick={() => {setMode('everything')}}>Everything</button>
                                         <div style={{display: 'flex', flexDirection: 'row'}}>
                                             <button className={'controls'} style={{width: '50%'}}>Undo Last Point</button>
                                             <button className={'controls'} style={{width: '50%'}} onClick={Clear}>Clear All</button>
@@ -481,7 +502,11 @@ function UI() {
                                     </input>
                                 </CardBody>
                             }
-                            {img_set && <img src={imagePreviewUrl} alt={filename} style={{aspectRatio: 1, width: 'undefined', height: 'undefined'}}/>}
+                            {/*{img_set && <img src={imagePreviewUrl} alt={filename} style={{aspectRatio: 1, width: 'undefined', height: 'undefined'}}/>}*/}
+                            {img_set && data && <InteractiveSegment
+                                data={data} mode={mode} processing={processing}
+                                points={points} setPoints={setPoints} masks={masks}
+                                ready={ready} setBoxReady={setBoxReady}/>}
                         </Card>
                     </Col>
                 </Row>

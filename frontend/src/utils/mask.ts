@@ -1,4 +1,4 @@
-export * as config from './config';
+export * as config from '../../config';
 
 
 export function hash(x: number) {
